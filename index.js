@@ -29,7 +29,7 @@ async function getVisitedCountryCodes(userId) {
     "SELECT country_code FROM visited_countries WHERE user_id = $1;",
     [userId]
   );
-  console.log("result.rows:", result.rows);
+  // console.log("result.rows:", result.rows);
   let visitedArray = result.rows.map((country) => country.country_code);
   // console.log("Visited country codes for user", userId, ":", visitedArray);
   return visitedArray;
@@ -101,26 +101,21 @@ app.post("/api/new", async (req, res) => {
 
 app.post("/api/delete", async (req, res) => {
   const { name } = req.body;
-  console.log(req.body); // req is send from client side and contains many things but we only need "name: 'name of the user to be deleted'"
+  console.log("Deleting user:", req.body.name); // req is send from client side and contains many things but we only need "name: 'name of the user to be deleted'"
   try {
     const userResult = await db.query("SELECT id FROM users WHERE LOWER(name) = LOWER($1)", [name]);
-    // console.log("User result for deletion:", userResult);
     if (userResult.rows.length === 0) {
       return res.status(404).json({ error: "User not found" });
     }
     const userId = userResult.rows[0].id;
-
     await db.query("DELETE FROM visited_countries WHERE user_id = $1", [userId]);
-
     await db.query("DELETE FROM users WHERE id = $1", [userId]);
 
     res.json({ success: true });
   } catch (err) {
-    console.error("Delete error:", err);
     res.status(500).json({ error: "Failed to delete user" });
   }
 });
-
 
 app.listen(port, () => {
   console.log(`Backend Server running on http://localhost:${port}`);

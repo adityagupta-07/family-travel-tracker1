@@ -36,19 +36,19 @@ function NewUser() {
 
   const handleDelete = async (e) => {
     e.preventDefault();
-    // console.log("Deleting:", deleteName); // printing the name to be deleted on client side 
     try {
-      const res = await axios.post("http://localhost:3000/api/delete", {
-        name: deleteName,
-      });
-      // console.log()
-      // console.log(res.data); // printing the response from the server on client side
+      await axios.post("http://localhost:3000/api/delete", {name: deleteName});
       navigate("/");
     } catch (err) {
-      console.error("Error deleting user:", err); 
-      alert("User not found.");
+      if (err.response?.status === 404) {
+        alert("User not found.");
+      } else {
+        console.error("Error deleting user:", err);
+      }
+      navigate("/");
     }
   };
+
 
   return (
     <div className="new-user-container">
