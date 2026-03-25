@@ -36,12 +36,12 @@ function NewUser() {
 
   const handleDelete = async (e) => {
     e.preventDefault();
-    console.log("Deleting:", deleteName); 
+    // console.log("Deleting:", deleteName); // printing the name to be deleted on client side 
     try {
       const res = await axios.post("http://localhost:3000/api/delete", {
         name: deleteName,
       });
-      console.log(res.data); 
+      // console.log(res.data); // printing the response from the server on client side
       navigate("/");
     } catch (err) {
       console.error("Error deleting user:", err); 
