@@ -14,7 +14,7 @@ function Home() {
   const [visitedCountries, setVisitedCountries] = useState([]); 
   const [error, setError] = useState(null); 
   const navigate = useNavigate(); 
- 
+
   const fetchData = async () => {
     try {
       const response = await axios.get(`${API_URL}/api/data`); 
