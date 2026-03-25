@@ -41,10 +41,12 @@ function NewUser() {
       const res = await axios.post("http://localhost:3000/api/delete", {
         name: deleteName,
       });
+      // console.log()
       // console.log(res.data); // printing the response from the server on client side
       navigate("/");
     } catch (err) {
       console.error("Error deleting user:", err); 
+      alert("User not found.");
     }
   };
 

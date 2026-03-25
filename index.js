@@ -31,7 +31,7 @@ async function getVisitedCountryCodes(userId) {
   );
   console.log("result.rows:", result.rows);
   let visitedArray = result.rows.map((country) => country.country_code);
-  console.log("Visited country codes for user", userId, ":", visitedArray);
+  // console.log("Visited country codes for user", userId, ":", visitedArray);
   return visitedArray;
 }
 
@@ -101,8 +101,10 @@ app.post("/api/new", async (req, res) => {
 
 app.post("/api/delete", async (req, res) => {
   const { name } = req.body;
+  console.log(req.body); // req is send from client side and contains many things but we only need "name: 'name of the user to be deleted'"
   try {
-    const userResult = await db.query("SELECT id FROM users WHERE name = $1", [name]);
+    const userResult = await db.query("SELECT id FROM users WHERE LOWER(name) = LOWER($1)", [name]);
+    // console.log("User result for deletion:", userResult);
     if (userResult.rows.length === 0) {
       return res.status(404).json({ error: "User not found" });
     }
