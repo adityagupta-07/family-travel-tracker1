@@ -1,6 +1,6 @@
 import React from "react";
 
-function UserSelector({ users, currentUserId, onSelect, onAddNew }) { 
+function UserSelector({ users, currentUserId, onSelect, onAddNew, onManageCountries }) { 
   return (
     <div className="selectors">
       {users.map((user) => (
@@ -14,26 +14,21 @@ function UserSelector({ users, currentUserId, onSelect, onAddNew }) {
           />
           <label 
             htmlFor={user.id} 
-            style={{ 
-              backgroundColor: user.color, 
-              cursor: 'pointer', 
-            }}
+            style={{ backgroundColor: user.color, cursor: 'pointer' }}
           >
             {user.name} 
           </label>
         </React.Fragment>
       ))}
 
-      <button 
-        type="button" 
-        id="tab" 
-        onClick={onAddNew}
-        style={{ cursor: 'pointer' }}
-      >
+      <button type="button" id="tab" onClick={onAddNew}>
         Add Family Member or Delete Family Member
+      </button>
+
+      <button type="button" id="tab" onClick={onManageCountries}>
+        Manage Countries
       </button>
     </div>
   );
 }
-
 export default UserSelector;

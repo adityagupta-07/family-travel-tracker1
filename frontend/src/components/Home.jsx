@@ -87,6 +87,7 @@ function Home() {
             currentUserId={currentUser?.id} //currentUser id
             onSelect={handleUserChange}
             onAddNew={() => navigate("/new")}
+            onManageCountries={() => navigate(`/manage/${currentUser?.id}`, { state: { color: currentUser?.color, name: currentUser?.name } })}
           />
 
           <AddCountryForm
