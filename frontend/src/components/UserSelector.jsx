@@ -1,6 +1,6 @@
 import React from "react";
 
-function UserSelector({ users, currentUserId, onSelect, onAddNew, onManageCountries }) { 
+function UserSelector({ users, currentUserId, onSelect, onAddNew, onManageCountries, onSearchUser, showSearch }) {
   return (
     <div className="selectors">
       {users.map((user) => (
@@ -21,8 +21,14 @@ function UserSelector({ users, currentUserId, onSelect, onAddNew, onManageCountr
         </React.Fragment>
       ))}
 
+      {showSearch && (
+        <button type="button" id="tab" onClick={onSearchUser}>
+          Search User
+        </button>
+      )}
+
       <button type="button" id="tab" onClick={onAddNew}>
-        Add Family Member or Delete Family Member
+        Add / Delete Member
       </button>
 
       <button type="button" id="tab" onClick={onManageCountries}>

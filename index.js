@@ -45,6 +45,7 @@ app.get("/api/data", async (req, res) => {
 
     if (users.length > 0) {
       currentUser = users.find((user) => user.id == currentUserId) || users[0];
+      currentUserId = currentUser.id;
       countries = await getVisitedCountryCodes(currentUser.id);
     }
 

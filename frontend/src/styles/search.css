@@ -1,0 +1,147 @@
+.search-wrapper {
+  width: 100%;
+  max-width: 650px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.search-container {
+  min-height: 100vh;
+  background-color: #21252b;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5rem 2rem 2rem;
+  font-family: "Roboto", sans-serif;
+  position: relative;
+  overflow: visible;
+}
+
+.search-container h1 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.search-input {
+  flex: 1;          
+  padding: 14px 20px;
+  box-sizing: border-box;
+  font-size: 1rem;
+  background-color: #383d46;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  outline: none;
+}
+
+.search-input:focus {
+  border: 2px solid #008080;
+}
+
+.search-dropdown {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;   /* ← key change */
+  top: 100%;
+  left: 0;
+  right: 0;             /* stretches to match wrapper width */
+  background-color: #2e333b;
+  border-radius: 0 0 8px 8px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  /* z-index: 100; */
+}
+
+.search-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: background-color 0.15s;
+  font-size: 1rem;
+}
+
+.search-item:hover {
+  background-color: #383d46;
+}
+
+.search-item.selected {
+  background-color: #3a4a3a;
+}
+
+.search-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.search-name {
+  flex: 1;
+}
+
+.search-tick {
+  color: lightgreen;
+  font-weight: bold;
+}
+
+.search-selected {
+  display: flex;
+  align-items: center;
+}
+
+.search-selected p {
+  margin-bottom: 0.5rem;
+  color: #aaa;
+}
+
+.search-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.search-chip {
+  padding: 6px 12px;
+  border-radius: 20px;
+  color: white;
+  font-weight: bold;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.search-chip:hover {
+  opacity: 0.75;
+}
+
+.search-confirm {
+  padding: 0.7rem 1.5rem;
+  background-color: #008080;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;   /* ← prevents wrapping */
+  transition: opacity 0.2s, transform 0.1s;
+}
+
+.search-confirm:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
+.search-confirm:not(:disabled):hover {
+  opacity: 0.85;
+}
+
+.search-confirm:active {
+  transform: scale(0.95);
+}

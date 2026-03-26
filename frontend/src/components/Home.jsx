@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../styles/main.css";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import UserSelector from "./UserSelector";
 import AddCountryForm from "./AddCountryForm";
 import Map from "./Map";
@@ -13,7 +13,9 @@ function Home() {
   const [currentUser, setCurrentUser] = useState(null);
   const [visitedCountries, setVisitedCountries] = useState([]);
   const [error, setError] = useState(null);
+  const [pinnedUsers, setPinnedUsers] = useState([]);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const fetchData = async () => {
     try {
@@ -28,12 +30,19 @@ function Home() {
       //   }
       // }
 
+      setPinnedUsers((prev) => {
+        if (prev.length === 0) return allUsers.slice(0, 5);
+        // keep existing pinned, update their data (name/color might change)
+        return prev
+          .map((p) => allUsers.find((u) => u.id === p.id))
+          .filter(Boolean);
+      });
+
       const user =
         allUsers.find((u) => u.id === response.data.currentUser?.id) ||
         allUsers[0] ||
         null;
       setCurrentUser(user);
-
       setVisitedCountries(response.data.countries || []);
     } catch (err) {
       console.error("Error fetching data:", err);
@@ -43,9 +52,27 @@ function Home() {
     }
   };
 
+  const handlePinnedUsersChange = (newPinned) => {
+    setPinnedUsers(newPinned);
+  };
+
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (location.state?.newPinned) {
+      const newPinned = location.state.newPinned;
+      setPinnedUsers(newPinned);
+
+      const stillPinned = newPinned.find((u) => u.id === currentUser?.id);
+      if (!stillPinned && newPinned.length > 0) {
+        handleUserChange(newPinned[0].id);
+      }
+
+      window.history.replaceState({}, "");
+    }
+  }, [location.state?.newPinned]);
 
   const handleUserChange = async (userId) => {
     try {
@@ -86,7 +113,8 @@ function Home() {
       ) : (
         <>
           <UserSelector
-            users={users} //all users
+            // users={users} //all users
+            users={pinnedUsers} //only pinned users
             currentUserId={currentUser?.id} //currentUser id
             onSelect={handleUserChange}
             onAddNew={() => navigate("/new")}
@@ -95,6 +123,12 @@ function Home() {
                 state: { color: currentUser?.color, name: currentUser?.name },
               })
             }
+            onSearchUser={() =>
+              navigate("/search", {
+                state: { pinnedUsers, allUsers: users },
+              })
+            }
+            showSearch={users.length > 5}
           />
 
           <AddCountryForm
