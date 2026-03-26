@@ -11,24 +11,27 @@ const API_URL = "http://localhost:3000";
 function Home() {
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
-  const [visitedCountries, setVisitedCountries] = useState([]); 
-  const [error, setError] = useState(null); 
-  const navigate = useNavigate(); 
+  const [visitedCountries, setVisitedCountries] = useState([]);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${API_URL}/api/data`); 
-      const allUsers = response.data.users || []; 
-      setUsers(allUsers); 
+      const response = await axios.get(`${API_URL}/api/data`);
+      const allUsers = response.data.users || [];
+      setUsers(allUsers);
       // response = {
-      //   data: {              // ← object 
+      //   data: {              // ← object
       //     users: [...],      // ← array
       //     countries: [...],  // ← array
       //     currentUser: {}    // ← object
       //   }
       // }
 
-      const user = allUsers.find((u) => u.id === response.data.currentUser?.id) || allUsers[0] || null; 
+      const user =
+        allUsers.find((u) => u.id === response.data.currentUser?.id) ||
+        allUsers[0] ||
+        null;
       setCurrentUser(user);
 
       setVisitedCountries(response.data.countries || []);
@@ -44,9 +47,9 @@ function Home() {
     fetchData();
   }, []);
 
-  const handleUserChange = async (userId) => { 
+  const handleUserChange = async (userId) => {
     try {
-      await axios.post(`${API_URL}/user`, { user: userId }); 
+      await axios.post(`${API_URL}/user`, { user: userId });
       fetchData();
     } catch (err) {
       console.error("Error switching user:", err);
@@ -87,7 +90,11 @@ function Home() {
             currentUserId={currentUser?.id} //currentUser id
             onSelect={handleUserChange}
             onAddNew={() => navigate("/new")}
-            onManageCountries={() => navigate(`/manage/${currentUser?.id}`, { state: { color: currentUser?.color, name: currentUser?.name } })}
+            onManageCountries={() =>
+              navigate(`/manage/${currentUser?.id}`, {
+                state: { color: currentUser?.color, name: currentUser?.name },
+              })
+            }
           />
 
           <AddCountryForm
@@ -95,7 +102,7 @@ function Home() {
             color={currentUser?.color || "black"}
             error={error}
           />
-          
+
           <Map
             visitedCountries={visitedCountries}
             userColor={currentUser?.color || "black"}

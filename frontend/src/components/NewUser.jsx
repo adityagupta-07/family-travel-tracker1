@@ -19,16 +19,18 @@ const COLORS = [
 function NewUser() {
   const [name, setName] = useState("");
   const [selectedColor, setSelectedColor] = useState("red");
-  const [deleteName, setDeleteName] = useState(""); 
+  const [deleteName, setDeleteName] = useState("");
+  const [addSuccess, setAddSuccess] = useState(false);
+  const [deleteSuccess, setDeleteSuccess] = useState(false);
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await axios.post("http://localhost:3000/api/new", {
-        name: name,
+        name,
         color: selectedColor,
       });
-      navigate("/"); 
+      setAddSuccess(true);
     } catch (err) {
       console.error("Error adding user:", err);
     }
@@ -37,21 +39,28 @@ function NewUser() {
   const handleDelete = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3000/api/delete", {name: deleteName});
-      navigate("/");
+      await axios.post("http://localhost:3000/api/delete", {
+        name: deleteName,
+      });
+      setDeleteSuccess(true);
     } catch (err) {
       if (err.response?.status === 404) {
         alert("User not found.");
       } else {
         console.error("Error deleting user:", err);
       }
-      navigate("/");
     }
   };
 
-
   return (
-    <div className="new-user-container">
+    <div className="new-user-container" style={{ position: "relative" }}>
+      <button
+        type="button"
+        onClick={() => navigate("/")}
+        style={{ position: "absolute", top: "20px", left: "20px" }}
+      >
+        ← Back to Home
+      </button>
       <h1>Add or delete a Family Member</h1>
       <form onSubmit={handleSubmit}>
         <p>Add a family member:</p>
@@ -83,6 +92,9 @@ function NewUser() {
 
         <button type="submit">Add</button>
       </form>
+      {addSuccess && (
+        <p style={{ color: "lightgreen" }}>Member added successfully!</p>
+      )}
 
       <form onSubmit={handleDelete}>
         <p>Delete a family member:</p>
@@ -95,6 +107,9 @@ function NewUser() {
         />
         <button type="submit">Delete</button>
       </form>
+      {deleteSuccess && (
+        <p style={{ color: "lightgreen" }}>Member deleted successfully!</p>
+      )}
     </div>
   );
 }
