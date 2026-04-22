@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../styles/search.css";
+import { all } from "axios";
 
 function SearchUser() {
   const navigate = useNavigate();
@@ -11,12 +12,12 @@ function SearchUser() {
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState([]); // array of user objects
 
-  const filtered =
+  const filtered = (
     query.trim() === ""
-      ? []
+      ? allUsers
       : allUsers.filter((u) =>
           u.name.toLowerCase().startsWith(query.toLowerCase()),
-        );
+        )  ).slice().sort((a, b) => a.name.localeCompare(b.name));
 
   const toggleSelect = (user) => {
     setSelected((prev) => {

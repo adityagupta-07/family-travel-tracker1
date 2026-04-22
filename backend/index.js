@@ -3,11 +3,25 @@ import bodyParser from "body-parser";
 import pg from "pg";
 import cors from "cors";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser"; 
+import authRoutes from "./routes/auth.js"; 
+import forgotPasswordRoutes from "./routes/forgotPassword.js"; 
 
 dotenv.config();
 const app = express();
 app.use(express.json());
-const port = 3000;
+const port = 3000 || process.env.PORT;
+
+app.use(cors({
+  origin: process.env.CLIENT_URL,
+  credentials: true,
+}));
+
+app.use(cookieParser()); 
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use("/api/auth", authRoutes);
+app.use("/api/auth", forgotPasswordRoutes);
 
 const db = new pg.Client({
   user: process.env.PG_USER,

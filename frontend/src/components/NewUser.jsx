@@ -145,6 +145,18 @@ function NewUser() {
         />
         <button type="submit">Delete</button>
       </form>
+
+      <button
+        type="button"
+        onClick={() => navigate("/delete-users")}
+        style={{
+          marginTop: "20px",
+          width: "320px",
+          backgroundColor: "#c0392b",
+        }}
+      >
+        🗑 Delete Multiple Users
+      </button>
     </div>
   );
 }
