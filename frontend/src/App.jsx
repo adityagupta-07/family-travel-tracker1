@@ -23,7 +23,6 @@ import ResetPassword from "./pages/ResetPassword";
 
 function AppRoutes() {
   const minutes = Number(import.meta.env.VITE_SESSION_TIMEOUT_MINUTES) || 1;
-  console.log("Session timeout minutes:", minutes);
   useSessionTimeout(minutes * 60 * 1000); //by default, this is in unit of milliseconds, so we convert minutes to ms
   return (
     <Routes>
