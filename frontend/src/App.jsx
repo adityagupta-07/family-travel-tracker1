@@ -22,8 +22,9 @@ import VerifyOtp from "./pages/VerifyOtp";
 import ResetPassword from "./pages/ResetPassword";
 
 function AppRoutes() {
-  const minutes = Number(import.meta.env.VITE_SESSION_TIMEOUT_MINUTES) || 30;
-  useSessionTimeout(minutes * 60 * 1000);
+  const minutes = Number(import.meta.env.VITE_SESSION_TIMEOUT_MINUTES) || 1;
+  console.log("Session timeout minutes:", minutes);
+  useSessionTimeout(minutes * 60 * 1000); //by default, this is in unit of milliseconds, so we convert minutes to ms
   return (
     <Routes>
       <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
