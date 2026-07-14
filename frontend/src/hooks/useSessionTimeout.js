@@ -3,28 +3,32 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const useSessionTimeout = (timeoutMs = 30 * 60 * 1000) => {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth(); // ← add isAuthenticated (or whatever your AuthContext exposes)
   const navigate = useNavigate();
   const timerRef = useRef(null);
-  const timeoutMsRef = useRef(timeoutMs);
+
+  const logoutRef = useRef(logout);
+  const navigateRef = useRef(navigate);
+  useEffect(() => { logoutRef.current = logout; }, [logout]);
+  useEffect(() => { navigateRef.current = navigate; }, [navigate]);
 
   useEffect(() => {
-    timeoutMsRef.current = timeoutMs;
-  }, [timeoutMs]);
 
-  useEffect(() => {
+    if (!user) {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      return;
+    }
+
     const resetTimer = () => {
       if (timerRef.current) clearTimeout(timerRef.current);
       timerRef.current = setTimeout(async () => {
-        await logout();
-        navigate("/login");
-      }, timeoutMsRef.current);
+        await logoutRef.current();
+        navigateRef.current("/login");
+      }, timeoutMs);
     };
 
-    // Start timer immediately
     resetTimer();
 
-    // Track ALL these events
     const events = ["mousemove", "mousedown", "keydown", "touchstart", "scroll", "click"];
     events.forEach((e) => window.addEventListener(e, resetTimer));
 
@@ -32,7 +36,7 @@ const useSessionTimeout = (timeoutMs = 30 * 60 * 1000) => {
       if (timerRef.current) clearTimeout(timerRef.current);
       events.forEach((e) => window.removeEventListener(e, resetTimer));
     };
-  }, []);
+  }, [user, timeoutMs]); 
 };
 
 export default useSessionTimeout;
