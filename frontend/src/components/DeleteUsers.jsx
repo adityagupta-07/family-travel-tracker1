@@ -17,7 +17,7 @@ function DeleteUsers() {
 
   const toggleSelect = (id) => {
     setSelected((prev) =>
-      prev.includes(id) ? prev.filter((uid) => uid !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((uid) => uid !== id) : [...prev, id],
     );
   };
 
@@ -39,7 +39,7 @@ function DeleteUsers() {
           return axios.post("http://localhost:3000/api/delete", {
             name: user.name,
           });
-        })
+        }),
       );
       setUsers((prev) => prev.filter((u) => !selected.includes(u.id)));
       setSelected([]);
@@ -72,12 +72,17 @@ function DeleteUsers() {
         <div style={styles.card}>
           {/* Select All */}
           <div style={styles.selectAllRow} onClick={selectAll}>
-            <div style={{
-              ...styles.checkbox,
-              backgroundColor: selected.length === users.length ? "teal" : "transparent",
-              borderColor: selected.length === users.length ? "teal" : "#555",
-            }}>
-              {selected.length === users.length && <span style={styles.tick}>✓</span>}
+            <div
+              style={{
+                ...styles.checkbox,
+                backgroundColor:
+                  selected.length === users.length ? "teal" : "transparent",
+                borderColor: selected.length === users.length ? "teal" : "#555",
+              }}
+            >
+              {selected.length === users.length && (
+                <span style={styles.tick}>✓</span>
+              )}
             </div>
             <span style={styles.selectAllLabel}>
               {selected.length === users.length ? "Deselect All" : "Select All"}
@@ -87,34 +92,38 @@ function DeleteUsers() {
           <div style={styles.divider} />
 
           {/* User list */}
-          {users.map((user) => {
-            const isChecked = selected.includes(user.id);
-            return (
-              <div
-                key={user.id}
-                style={{
-                  ...styles.row,
-                  backgroundColor: isChecked ? "#2a2f38" : "transparent",
-                }}
-                onClick={() => toggleSelect(user.id)}
-              >
-                <div style={{
-                  ...styles.checkbox,
-                  backgroundColor: isChecked ? "teal" : "transparent",
-                  borderColor: isChecked ? "teal" : "#555",
-                }}>
-                  {isChecked && <span style={styles.tick}>✓</span>}
-                </div>
+          <div style={styles.scrollArea}>
+            {users.map((user) => {
+              const isChecked = selected.includes(user.id);
+              return (
                 <div
+                  key={user.id}
                   style={{
-                    ...styles.colorDot,
-                    backgroundColor: user.color,
+                    ...styles.row,
+                    backgroundColor: isChecked ? "#2a2f38" : "transparent",
                   }}
-                />
-                <span style={styles.name}>{user.name}</span>
-              </div>
-            );
-          })}
+                  onClick={() => toggleSelect(user.id)}
+                >
+                  <div
+                    style={{
+                      ...styles.checkbox,
+                      backgroundColor: isChecked ? "teal" : "transparent",
+                      borderColor: isChecked ? "teal" : "#555",
+                    }}
+                  >
+                    {isChecked && <span style={styles.tick}>✓</span>}
+                  </div>
+                  <div
+                    style={{
+                      ...styles.colorDot,
+                      backgroundColor: user.color,
+                    }}
+                  />
+                  <span style={styles.name}>{user.name}</span>
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
 
@@ -145,6 +154,10 @@ const styles = {
     fontFamily: "Roboto, sans-serif",
     position: "relative",
   },
+  scrollArea: {
+    overflowY: "auto",
+    flex: 1,
+  },
   backBtn: {
     position: "absolute",
     top: "20px",
@@ -172,6 +185,9 @@ const styles = {
     borderRadius: "12px",
     overflow: "hidden",
     boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
+    display: "flex",
+    flexDirection: "column",
+    maxHeight: "60vh",
   },
   selectAllRow: {
     display: "flex",
@@ -227,6 +243,8 @@ const styles = {
     fontWeight: "500",
   },
   deleteBtn: {
+    position: "sticky",
+    bottom: "20px",
     marginTop: "24px",
     padding: "14px 28px",
     borderRadius: "8px",
@@ -238,6 +256,7 @@ const styles = {
     cursor: "pointer",
     width: "100%",
     maxWidth: "420px",
+    boxShadow: "0 -4px 15px rgba(0,0,0,0.4)",
   },
   toast: {
     position: "fixed",
