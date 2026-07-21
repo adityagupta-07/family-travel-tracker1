@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import UserSelector from "./UserSelector";
 import AddCountryForm from "./AddCountryForm";
 import Map from "./Map";
+import { useAuth } from "../context/AuthContext";
 
 const API_URL = "http://localhost:3000";
 
@@ -16,6 +17,7 @@ function Home() {
   const [pinnedUsers, setPinnedUsers] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
+  const { logout } = useAuth();
 
   const fetchData = async () => {
     try {
@@ -54,6 +56,11 @@ function Home() {
 
   const handlePinnedUsersChange = (newPinned) => {
     setPinnedUsers(newPinned);
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/login");
   };
 
   useEffect(() => {
@@ -96,6 +103,9 @@ function Home() {
 
   return (
     <div className="home-container">
+      <button onClick={handleLogout} style={{ float: "right" }}>
+        Logout
+      </button>
       {users.length === 0 ? (
         <div
           style={{
